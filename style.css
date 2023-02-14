@@ -1,7 +1,11 @@
+*{
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
 body {
     margin: 0;
     padding: 0;
     background-image: url('caminho/para/imagem/fundo.jpg');
+    background-color: aliceblue;
     background-size: cover;
     background-position: center;
     font-family: Arial, sans-serif;
@@ -17,11 +21,14 @@ body {
 }
 
 h1 {
+
     font-size: 4em;
     margin-bottom: 0;
+    color: #000;
 }
 
 #start-button {
+
     background-color: #fff;
     color: #000;
     border: none;
@@ -30,3 +37,24 @@ h1 {
     font-size: 1.5em;
     cursor: pointer;
 }
+
+#jogo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 100px;
+  }
+  
+.quadrado {
+    width: 80px;
+    height: 80px;
+    background-color: #fff;
+    border: 1px solid #000;
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 40px;
+    text-align: center;
+}
+  

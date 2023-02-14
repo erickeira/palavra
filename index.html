@@ -6,10 +6,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="wrapper">
+    <div class="wrapper" id="tela-inicial">
         <h1>Meu Jogo</h1>
         <button id="start-button">COMEÇAR</button>
     </div>
+    <div id="jogo" style="display: none;">
+        <input class="quadrado" type="text" autofocus>
+        <input class="quadrado" type="text">
+        <input class="quadrado" type="text">
+        <input class="quadrado" type="text">
+        <input class="quadrado" type="text">
+    </div>
+      
     <canvas id="canvas"></canvas>
     <script src="jogo.js"></script>
 </body>
