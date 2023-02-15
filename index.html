@@ -2,23 +2,39 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sword</title>
+    <title>PALAVRAS</title>
+    <meta name="description" content="Jogo Top de palavras" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="wrapper" id="tela-inicial">
-        <h1>Meu Jogo</h1>
+        <h1>PALAVRAS</h1>
         <button id="start-button">COMEÇAR</button>
     </div>
     <div id="jogo" style="display: none;">
+        <!-- <h3 id="resposta">Resposta</h3> -->
+        <div id="placar">
+            Pontuação: <span id="pontuacao">0</span>
+          </div>
+        <div id="quadrados-input">
         <input class="quadrado" type="text" autofocus>
         <input class="quadrado" type="text">
         <input class="quadrado" type="text">
         <input class="quadrado" type="text">
         <input class="quadrado" type="text">
+        </div>
+        <table id="respostas"></table>
+
+        <div id="ajudas">
+            <!-- <button id="proximo-btn">Próxima Palavra</button>
+            <span id="label-prox-palavra"></span> -->
+            <button id="dica-btn">Letra dica</button>
+            <span id="label-dica"></span>
+        </div>
     </div>
+
       
-    <canvas id="canvas"></canvas>
+    <!-- <canvas id="canvas"></canvas> -->
     <script src="jogo.js"></script>
 </body>
 </html>
