@@ -49,107 +49,105 @@ let respostaAtual = 1;
 let respostas = [];
 inputs.forEach((input, index) => {
   input.addEventListener('keydown', async (event) => {
-    if (event.key === 'Enter'){
-      
-    }
-    // permite apenas letras
-    if (event.key === 'Backspace') {
-      // insere a letra no input
-      input.value = '';
-      // move o foco para o próximo input, se houver
-      const nextInput = inputs[index - 1];
-      if (nextInput) {
-        input.setAttribute('disabled', 'disabled');
-        nextInput.removeAttribute('disabled');
-        nextInput.focus();
-      }
-      return
-    }
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      return;
-    }
-    if (/^[a-zA-Z]$/.test(event.key)) {
-      // insere a letra no input
-      input.value = event.key.toUpperCase();
-      input.setAttribute('disabled', 'disabled');
-      // move o foco para o próximo input, se houver
-      const nextInput = inputs[index + 1];
-      if (nextInput) {
-        nextInput.removeAttribute('disabled');
-        nextInput.focus();
-      }
-    }else{
-      return
-    }
-    // previne que outras teclas sejam pressionadas
-    event.preventDefault();
 
-    // INCREMENTA LISTA DE RESPOSTAS
-    const isLastInputFilled = Array.from(inputs).every((input) => input.value !== '');
-    if (isLastInputFilled) {
-      const letters = Array.from(inputs).map((input) => input.value.toUpperCase().charAt(0));
-      respostas[respostaAtual - 1] = letters;
-      console.log(respostas);
-      Array.from(inputs).forEach((input) => {
-        input.removeAttribute('disabled');
+      // permite apenas letras
+      if (event.key === 'Backspace') {
+        // insere a letra no input
         input.value = '';
-      });
+        // move o foco para o próximo input, se houver
+        const nextInput = inputs[index - 1];
+        if (nextInput) {
+          input.setAttribute('disabled', 'disabled');
+          nextInput.removeAttribute('disabled');
+          nextInput.focus();
+        }
+        return
+      }
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        return;
+      }
 
-      const sequenciaDeLetras = letters.join('');
-      //VERIFICA SE ACERTOU
-      if (sequenciaDeLetras === resposta.slice(-sequenciaDeLetras.length)) {
-        await new Promise((resolve) => {
-          let trHTML = '<tr>';
-          letters.forEach((letter, index) => {
-            let classe = (resposta.toUpperCase().includes(letter)) ? (resposta.split().some((letra, indexLetra) => indexLetra == index && letra == letter) ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
-            trHTML += `<td class="${classe}">${letter}</td>`;
-          });
-          trHTML += '</tr>';
-          tabelaContainer.innerHTML += trHTML;
-          pontosPorRodada -= 100;
-          resolve();
+      if (/^[a-zA-Z]$/.test(event.key)) {
+        // insere a letra no input
+        input.value = event.key.toUpperCase();
+        // move o foco para o próximo input, se houver
+        const nextInput = inputs[index + 1];
+        if (nextInput) {
+          input.setAttribute('disabled', 'disabled');
+          nextInput.removeAttribute('disabled');
+          nextInput.focus();
+        }
+      }
+      // previne que outras teclas sejam pressionadas
+      event.preventDefault();
+  
+      // INCREMENTA LISTA DE RESPOSTAS
+      const isLastInputFilled = Array.from(inputs).every((input) => input.value !== '');
+ 
+      if (isLastInputFilled && event.key === 'Enter') {
+        const letters = Array.from(inputs).map((input) => input.value.toUpperCase().charAt(0));
+        respostas[respostaAtual - 1] = letters;
+        console.log(respostas);
+        Array.from(inputs).forEach((input) => {
+          input.removeAttribute('disabled');
+          input.value = '';
         });
-        setTimeout(() => {
-          if (window.confirm(`Parabéns, você acertou a palavra ${resposta}! Clique em OK para jogar novamente.`)) {
+  
+        const sequenciaDeLetras = letters.join('');
+        //VERIFICA SE ACERTOU
+        if (sequenciaDeLetras === resposta.slice(-sequenciaDeLetras.length)) {
+          await new Promise((resolve) => {
+            let trHTML = '<tr class="linha">';
+            letters.forEach((letter, index) => {
+              let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
+              trHTML += `<td class="${classe}">${letter}</td>`;
+            });
+            trHTML += '</tr>';
+            tabelaContainer.innerHTML += trHTML;
+            pontosPorRodada -= 100;
+            resolve();
+          });
+          setTimeout(() => {
+            if (window.confirm(`Parabéns, você acertou a palavra ${resposta}! Clique em OK para jogar novamente.`)) {
+              pontuacaoAtual += pontosPorRodada;
+              pontosPorRodada = 600;
+              novaRodada();
+              atualizarPontuacao()
+            }
+          }, 500);
+          inputs[0].focus();
+          return
+        }
+  
+
+        if (respostaAtual <= 6) {
+          await new Promise((resolve) => {
+            let trHTML = '<tr class="linha">';
+            letters.forEach((letter, index) => {
+              console.log(resposta[index])
+              let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
+              trHTML += `<td class="${classe}">${letter}</td>`;
+            });
+            trHTML += '</tr>';
+            tabelaContainer.innerHTML += trHTML;
+            pontosPorRodada -= 100;
+            resolve();
+          });
+          Array.from(inputs)[0].focus();
+        }
+        if (respostaAtual > 5) {
+          if (window.confirm(`Que pena! a palavra era ${resposta}, Clique em OK para jogar novamente.`)) {
             pontuacaoAtual += pontosPorRodada;
             pontosPorRodada = 600;
             novaRodada();
             atualizarPontuacao()
           }
-        }, 500);
-        inputs[0].focus();
-        return
-      }
-
-      if (respostaAtual > 6) {
-        await new Promise((resolve) => {
-          let trHTML = '<tr>';
-          letters.forEach((letter, index) => {
-            console.log(resposta[index])
-            let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
-            trHTML += `<td class="${classe}">${letter}</td>`;
-          });
-          trHTML += '</tr>';
-          tabelaContainer.innerHTML += trHTML;
-          pontosPorRodada -= 100;
-          resolve();
-        });
-        Array.from(inputs)[0].focus();
-      }
-      
-      if (respostaAtual > 5) {
-        if (window.confirm(`Que pena! a palavra era ${resposta}, Clique em OK para jogar novamente.`)) {
-          pontuacaoAtual += pontosPorRodada;
-          pontosPorRodada = 600;
-          novaRodada();
-          atualizarPontuacao()
         }
+        respostaAtual++;
+      } else {
+        Array.from(inputs)[index + 1]?.focus();
       }
-      respostaAtual++;
-    } else {
-      Array.from(inputs)[index + 1].focus();
-    }
   });
 });
 
@@ -174,7 +172,7 @@ function atualizarPontuacao() {
 }
 
 async function buscarPalavraProxima(palavra) {
-  const endpoint = `https://api.dicionario-aberto.net/near${palavra}`;
+  const endpoint = `https://api.dicionario-aberto.net/near/${palavra}`;
   const response = await fetch(endpoint);
   const data = await response.json();
   const proxima = data[0];
