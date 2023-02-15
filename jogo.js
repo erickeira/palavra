@@ -35,7 +35,8 @@ botaoStart.addEventListener('click', async function() {
   telaInicial.style.display = 'none';
   jogo.style.display = 'block';
   resposta = await obterPalavraAleatoria();
-  document.getElementById('resposta').textContent = resposta;
+  inputs[0].focus();
+  // document.getElementById('resposta').textContent = resposta;
 });
 
 const inputs = document.querySelectorAll('.quadrado');
@@ -60,6 +61,7 @@ inputs.forEach((input, index) => {
       // move o foco para o próximo input, se houver
       const nextInput = inputs[index + 1];
       if (nextInput) {
+        nextInput.removeAttribute('disabled');
         nextInput.focus();
       }
     }else{
@@ -143,7 +145,7 @@ async function novaRodada(){
     resposta = await obterPalavraAleatoria();
     respostaAtual = 1;
     inputs[0].focus();
-    document.getElementById('resposta').textContent = resposta;
+    // document.getElementById('resposta').textContent = resposta;
 }
 
 function atualizarPontuacao() {
