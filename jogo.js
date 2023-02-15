@@ -22,7 +22,7 @@ const labelDica = document.querySelector('#label-dica');
 
 function exibirDica() {
   let letrasRestantes = resposta.split('').filter(letra => {
-    return !respostas.some(resposta => resposta.includes(letra));
+    return !respostas.some(resposta => resposta.includes(letra) && !labelDica.textContent);
   });
   const letraDica = letrasRestantes[Math.floor(Math.random() * letrasRestantes.length)];
   labelDica.textContent = letraDica;
