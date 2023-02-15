@@ -49,7 +49,9 @@ let respostaAtual = 1;
 let respostas = [];
 inputs.forEach((input, index) => {
   input.addEventListener('keydown', async (event) => {
-
+    if (event.key === 'Enter'){
+      
+    }
     // permite apenas letras
     if (event.key === 'Backspace') {
       // insere a letra no input
@@ -120,7 +122,7 @@ inputs.forEach((input, index) => {
         return
       }
 
-      if (respostaAtual <= 6) {
+      if (respostaAtual > 6) {
         await new Promise((resolve) => {
           let trHTML = '<tr>';
           letters.forEach((letter, index) => {
@@ -135,6 +137,7 @@ inputs.forEach((input, index) => {
         });
         Array.from(inputs)[0].focus();
       }
+      
       if (respostaAtual > 5) {
         if (window.confirm(`Que pena! a palavra era ${resposta}, Clique em OK para jogar novamente.`)) {
           pontuacaoAtual += pontosPorRodada;
