@@ -49,7 +49,20 @@ let respostaAtual = 1;
 let respostas = [];
 inputs.forEach((input, index) => {
   input.addEventListener('keydown', async (event) => {
+
     // permite apenas letras
+    if (event.key === 'Backspace') {
+      // insere a letra no input
+      input.value = '';
+      // move o foco para o próximo input, se houver
+      const nextInput = inputs[index - 1];
+      if (nextInput) {
+        input.setAttribute('disabled', 'disabled');
+        nextInput.removeAttribute('disabled');
+        nextInput.focus();
+      }
+      return
+    }
     if (event.key === 'Tab') {
       event.preventDefault();
       return;
@@ -86,8 +99,8 @@ inputs.forEach((input, index) => {
       if (sequenciaDeLetras === resposta.slice(-sequenciaDeLetras.length)) {
         await new Promise((resolve) => {
           let trHTML = '<tr>';
-          letters.forEach((letter) => {
-            let classe = (resposta.toUpperCase().includes(letter)) ? 'quadrado-resposta-existe' : 'quadrado-resposta';
+          letters.forEach((letter, index) => {
+            let classe = (resposta.toUpperCase().includes(letter)) ? (resposta.split().some((letra, indexLetra) => indexLetra == index && letra == letter) ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
             trHTML += `<td class="${classe}">${letter}</td>`;
           });
           trHTML += '</tr>';
@@ -106,12 +119,13 @@ inputs.forEach((input, index) => {
         inputs[0].focus();
         return
       }
-      
+
       if (respostaAtual <= 6) {
         await new Promise((resolve) => {
           let trHTML = '<tr>';
-          letters.forEach((letter) => {
-            let classe = (resposta.toUpperCase().includes(letter)) ? 'quadrado-resposta-existe' : 'quadrado-resposta';
+          letters.forEach((letter, index) => {
+            console.log(resposta[index])
+            let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
             trHTML += `<td class="${classe}">${letter}</td>`;
           });
           trHTML += '</tr>';
