@@ -11,26 +11,29 @@
         <h1>PALAVRAS</h1>
         <button id="start-button">COMEÇAR</button>
     </div>
-    <div id="jogo" style="display: none;">
-        <!-- <h3 id="resposta">Resposta</h3> -->
-        <div id="placar">
-            Pontuação: <span id="pontuacao">0</span>
-          </div>
-        <div id="quadrados-input">
-        <input class="quadrado" type="text" autofocus>
-        <input class="quadrado" type="text" disabled>
-        <input class="quadrado" type="text" disabled>
-        <input class="quadrado" type="text" disabled>
-        <input class="quadrado" type="text" disabled>
-        </div>
-        <table id="respostas"></table>
-
-        <div id="ajudas">
+    <div id="ajudas" style="display: none; ">
+        <div class="botao-label">
             <button id="proximo-btn">Próxima palavra no dicionário</button>
             <span id="label-prox-palavra"></span>
+        </div>  
+        <div class="botao-label">
             <button id="dica-btn">Letra dica</button>
             <span id="label-dica"></span>
         </div>
+    </div>
+
+    <div id="jogo" style="display: none;">
+        <div id="placar">
+            Pontuação: <span id="pontuacao">0</span>
+        </div>
+        <div id="quadrados-input">
+            <input class="quadrado" type="text" autofocus maxlength="1">
+            <input class="quadrado" type="text" disabled  maxlength="1">
+            <input class="quadrado" type="text" disabled  maxlength="1">
+            <input class="quadrado" type="text" disabled  maxlength="1">
+            <input class="quadrado" type="text" disabled  maxlength="1">
+        </div>
+        <table id="respostas"></table>
     </div>
 
       

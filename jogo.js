@@ -2,11 +2,13 @@ const botaoStart = document.getElementById('start-button');
 const telaInicial = document.getElementById('tela-inicial');
 const botaoIniciar = document.getElementById('botao-iniciar');
 const jogo = document.getElementById('jogo');
+const ajudas = document.getElementById('ajudas');
 
 let resposta = ""
 let pontuacaoAtual = 0;
 let pontosPorRodada = 600;
 
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 600;
 
 const labelDica = document.querySelector('#label-dica');
 const labelProximaPalavra = document.querySelector('#label-prox-palavra');
@@ -34,6 +36,7 @@ dicaBtn.addEventListener('click', exibirDica);
 botaoStart.addEventListener('click', async function() {
   telaInicial.style.display = 'none';
   jogo.style.display = 'block';
+  ajudas.style.display = 'block';
   resposta = await obterPalavraAleatoria();
   inputs[0].focus();
   // document.getElementById('resposta').textContent = resposta;
@@ -47,109 +50,115 @@ inputs[0].focus();
 
 let respostaAtual = 1;
 let respostas = [];
+
 inputs.forEach((input, index) => {
-  input.addEventListener('keydown', async (event) => {
-
-      // permite apenas letras
-      if (event.key === 'Backspace') {
-        // insere a letra no input
-        input.value = '';
-        // move o foco para o próximo input, se houver
-        const nextInput = inputs[index - 1];
-        if (nextInput) {
-          input.setAttribute('disabled', 'disabled');
-          nextInput.removeAttribute('disabled');
-          nextInput.focus();
-        }
-        return
-      }
-      if (event.key === 'Tab') {
-        event.preventDefault();
-        return;
-      }
-
-      if (/^[a-zA-Z]$/.test(event.key)) {
-        // insere a letra no input
-        input.value = event.key.toUpperCase();
-        // move o foco para o próximo input, se houver
-        const nextInput = inputs[index + 1];
-        if (nextInput) {
-          input.setAttribute('disabled', 'disabled');
-          nextInput.removeAttribute('disabled');
-          nextInput.focus();
-        }
-      }
-      // previne que outras teclas sejam pressionadas
-      event.preventDefault();
-  
-      // INCREMENTA LISTA DE RESPOSTAS
-      const isLastInputFilled = Array.from(inputs).every((input) => input.value !== '');
- 
-      if (isLastInputFilled && event.key === 'Enter') {
-        const letters = Array.from(inputs).map((input) => input.value.toUpperCase().charAt(0));
-        respostas[respostaAtual - 1] = letters;
-        console.log(respostas);
-        Array.from(inputs).forEach((input) => {
-          input.removeAttribute('disabled');
-          input.value = '';
-        });
-  
-        const sequenciaDeLetras = letters.join('');
-        //VERIFICA SE ACERTOU
-        if (sequenciaDeLetras === resposta.slice(-sequenciaDeLetras.length)) {
-          await new Promise((resolve) => {
-            let trHTML = '<tr class="linha">';
-            letters.forEach((letter, index) => {
-              let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
-              trHTML += `<td class="${classe}">${letter}</td>`;
-            });
-            trHTML += '</tr>';
-            tabelaContainer.innerHTML += trHTML;
-            pontosPorRodada -= 100;
-            resolve();
-          });
-          setTimeout(() => {
-            if (window.confirm(`Parabéns, você acertou a palavra ${resposta}! Clique em OK para jogar novamente.`)) {
-              pontuacaoAtual += pontosPorRodada;
-              pontosPorRodada = 600;
-              novaRodada();
-              atualizarPontuacao()
-            }
-          }, 500);
-          inputs[0].focus();
-          return
-        }
-  
-
-        if (respostaAtual <= 6) {
-          await new Promise((resolve) => {
-            let trHTML = '<tr class="linha">';
-            letters.forEach((letter, index) => {
-              console.log(resposta[index])
-              let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
-              trHTML += `<td class="${classe}">${letter}</td>`;
-            });
-            trHTML += '</tr>';
-            tabelaContainer.innerHTML += trHTML;
-            pontosPorRodada -= 100;
-            resolve();
-          });
-          Array.from(inputs)[0].focus();
-        }
-        if (respostaAtual > 5) {
-          if (window.confirm(`Que pena! a palavra era ${resposta}, Clique em OK para jogar novamente.`)) {
-            pontuacaoAtual += pontosPorRodada;
-            pontosPorRodada = 600;
-            novaRodada();
-            atualizarPontuacao()
-          }
-        }
-        respostaAtual++;
-      } else {
-        Array.from(inputs)[index + 1]?.focus();
-      }
-  });
+  input.addEventListener('input', (event) =>{ if(!event.key) onDigit(event, input, index)})
+  input.addEventListener('keydown',  (event) =>{ onDigit(event, input, index) });
 });
+
+async function onDigit(event, input, index) {
+  // permite apenas letras
+  let letra = event.data ?  event.data :  event.key
+  if (letra === 'Backspace') {
+    // insere a letra no input
+    input.value = '';
+    // move o foco para o próximo input, se houver
+    const nextInput = inputs[index - 1];
+    if (nextInput) {
+      input.setAttribute('disabled', 'disabled');
+      nextInput.removeAttribute('disabled');
+      nextInput.focus();
+    }
+    return
+  }
+  if (letra === 'Tab') {
+    event.preventDefault();
+    return;
+  }
+
+  if ((letra && /^[a-zA-Z]$/.test(letra)) || (letra && /^[a-zA-Z]$/.test(letra))) {
+    // insere a letra no input
+    input.value = letra.toUpperCase();
+    // move o foco para o próximo input, se houver
+    const nextInput = inputs[index + 1];
+    console.log(letra)
+    if (nextInput) {
+      input.setAttribute('disabled', 'disabled');
+      nextInput.removeAttribute('disabled');
+      nextInput.focus();
+    }
+  }
+  // previne que outras teclas sejam pressionadas
+  event.preventDefault();
+
+  // INCREMENTA LISTA DE RESPOSTAS
+  const isLastInputFilled = Array.from(inputs).every((input) => input.value !== '');
+
+  if (isLastInputFilled && letra === 'Enter') {
+    const letters = Array.from(inputs).map((input) => input.value.toUpperCase().charAt(0));
+    respostas[respostaAtual - 1] = letters;
+    console.log(respostas);
+    Array.from(inputs).forEach((input) => {
+      input.removeAttribute('disabled');
+      input.value = '';
+    });
+
+    console.log(letra)
+    const sequenciaDeLetras = letters.join('');
+    //VERIFICA SE ACERTOU
+    if (sequenciaDeLetras === resposta.slice(-sequenciaDeLetras.length)) {
+      await new Promise((resolve) => {
+        let trHTML = '<tr class="linha">';
+        letters.forEach((letter, index) => {
+          let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
+          trHTML += `<td class="${classe}">${letter}</td>`;
+        });
+        trHTML += '</tr>';
+        tabelaContainer.innerHTML += trHTML;
+        pontosPorRodada -= 100;
+        resolve();
+      });
+      setTimeout(() => {
+        if (window.confirm(`Parabéns, você acertou a palavra ${resposta}! Clique em OK para jogar novamente.`)) {
+          pontuacaoAtual += pontosPorRodada;
+          pontosPorRodada = 600;
+          novaRodada();
+          atualizarPontuacao()
+        }
+      }, 500);
+      // inputs[0].focus();
+      return
+    }
+
+
+    if (respostaAtual <= 6) {
+      await new Promise((resolve) => {
+        let trHTML = '<tr class="linha">';
+        letters.forEach((letter, index) => {
+          console.log(resposta[index])
+          let classe = (resposta.toUpperCase().includes(letter)) ? (resposta[index] == letter ? 'quadrado-correto' : 'quadrado-resposta-existe') : 'quadrado-resposta';
+          trHTML += `<td class="${classe}">${letter}</td>`;
+        });
+        trHTML += '</tr>';
+        tabelaContainer.innerHTML += trHTML;
+        pontosPorRodada -= 100;
+        resolve();
+      });
+      Array.from(inputs)[0].focus();
+    }
+    if (respostaAtual > 5) {
+      if (window.confirm(`Que pena! a palavra era ${resposta}, Clique em OK para jogar novamente.`)) {
+        pontuacaoAtual += pontosPorRodada;
+        pontosPorRodada = 600;
+        novaRodada();
+        atualizarPontuacao()
+      }
+    }
+    respostaAtual++;
+  } 
+}
+
+
 
 async function novaRodada(){
     // Limpa a tabela
