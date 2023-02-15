@@ -9,16 +9,16 @@ let pontosPorRodada = 600;
 
 
 const labelDica = document.querySelector('#label-dica');
-// const labelProximaPalavra = document.querySelector('#label-prox-palavra');
+const labelProximaPalavra = document.querySelector('#label-prox-palavra');
 
-// async function exibirProximo() {
-//   let palavraProxima = await buscarPalavraProxima(resposta);
-//   console.log(palavraProxima)
-//   labelProximaPalavra.textContent = palavraProxima;
-// }
+async function exibirProximo() {
+  let palavraProxima = await buscarPalavraProxima(resposta);
+  console.log(palavraProxima)
+  labelProximaPalavra.textContent = palavraProxima;
+}
 
-// const proximoBtn = document.getElementById('proximo-btn');
-// proximoBtn.addEventListener('click', exibirProximo);
+const proximoBtn = document.getElementById('proximo-btn');
+proximoBtn.addEventListener('click', exibirProximo);
 
 function exibirDica() {
   let letrasRestantes = resposta.split('').filter(letra => {
