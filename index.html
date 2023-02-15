@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>PALAVRAS</title>
     <meta name="description" content="Jogo Top de palavras" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +12,8 @@
         <h1>PALAVRAS</h1>
         <button id="start-button">COMEÇAR</button>
     </div>
-    <div id="ajudas" style="display: none; ">
+
+    <div id="ajudas" style="display: none;  ">
         <div class="botao-label">
             <button id="proximo-btn">Próxima palavra no dicionário</button>
             <span id="label-prox-palavra"></span>
@@ -27,11 +29,11 @@
             Pontuação: <span id="pontuacao">0</span>
         </div>
         <div id="quadrados-input">
-            <input class="quadrado" type="text" autofocus maxlength="1">
-            <input class="quadrado" type="text" disabled  maxlength="1">
-            <input class="quadrado" type="text" disabled  maxlength="1">
-            <input class="quadrado" type="text" disabled  maxlength="1">
-            <input class="quadrado" type="text" disabled  maxlength="1">
+            <input class="quadrado" type="text" autofocus value=""/>
+            <input class="quadrado" type="text" disabled value=""/>
+            <input class="quadrado" type="text" disabled value=""/>
+            <input class="quadrado" type="text" disabled value=""/>
+            <input class="quadrado ultimoquadrado" type="text" disabled value=""/>
         </div>
         <table id="respostas"></table>
     </div>

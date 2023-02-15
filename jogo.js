@@ -36,13 +36,14 @@ dicaBtn.addEventListener('click', exibirDica);
 botaoStart.addEventListener('click', async function() {
   telaInicial.style.display = 'none';
   jogo.style.display = 'block';
-  ajudas.style.display = 'block';
+  ajudas.style.display = 'flex';
   resposta = await obterPalavraAleatoria();
   inputs[0].focus();
   // document.getElementById('resposta').textContent = resposta;
 });
 
 const inputs = document.querySelectorAll('.quadrado');
+
 let tabelaContainer = document.getElementById("respostas");
 document.body.appendChild(tabelaContainer);
 
@@ -51,13 +52,16 @@ inputs[0].focus();
 let respostaAtual = 1;
 let respostas = [];
 
-inputs.forEach((input, index) => {
+Array.from(inputs).forEach((input, index) => {
   input.addEventListener('input', (event) =>{ if(!event.key) onDigit(event, input, index)})
   input.addEventListener('keydown',  (event) =>{ onDigit(event, input, index) });
 });
 
 async function onDigit(event, input, index) {
   // permite apenas letras
+
+
+
   let letra = event.data ?  event.data :  event.key
   if (letra === 'Backspace') {
     // insere a letra no input
@@ -76,7 +80,7 @@ async function onDigit(event, input, index) {
     return;
   }
 
-  if ((letra && /^[a-zA-Z]$/.test(letra)) || (letra && /^[a-zA-Z]$/.test(letra))) {
+  if ((letra && /^[a-zA-Z]$/.test(letra)) || (letra && /^[a-zA-Z]$/.test(letra)) && input.value.length < 1) {
     // insere a letra no input
     input.value = letra.toUpperCase();
     // move o foco para o próximo input, se houver
@@ -88,6 +92,7 @@ async function onDigit(event, input, index) {
       nextInput.focus();
     }
   }
+
   // previne que outras teclas sejam pressionadas
   event.preventDefault();
 
@@ -114,7 +119,8 @@ async function onDigit(event, input, index) {
           trHTML += `<td class="${classe}">${letter}</td>`;
         });
         trHTML += '</tr>';
-        tabelaContainer.innerHTML += trHTML;
+        tabelaContainer.insertAdjacentHTML('afterbegin',trHTML)
+        // tabelaContainer.innerHTML += trHTML;
         pontosPorRodada -= 100;
         resolve();
       });
@@ -140,7 +146,8 @@ async function onDigit(event, input, index) {
           trHTML += `<td class="${classe}">${letter}</td>`;
         });
         trHTML += '</tr>';
-        tabelaContainer.innerHTML += trHTML;
+        tabelaContainer.insertAdjacentHTML('afterbegin',trHTML)
+        // tabelaContainer.innerHTML += trHTML;
         pontosPorRodada -= 100;
         resolve();
       });
