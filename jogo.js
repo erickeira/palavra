@@ -159,6 +159,7 @@ async function novaRodada(){
     resposta = await obterPalavraAleatoria();
     respostaAtual = 1;
     inputs[0].focus();
+    labelDica.textContent = null;
     // document.getElementById('resposta').textContent = resposta;
 }
 
@@ -166,6 +167,7 @@ function atualizarPontuacao() {
   const pontuacaoElement = document.getElementById('pontuacao');
   pontuacaoElement.textContent = pontuacaoAtual.toString();
   inputs[0].focus();
+  labelDica.textContent = null ;
 }
 
 async function buscarPalavraProxima(palavra) {
