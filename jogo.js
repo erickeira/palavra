@@ -214,18 +214,3 @@ async function obterPalavraAleatoria() {
   return palavras[indice].toLocaleUpperCase();
 }
 
-const dialog = document.querySelector('.dialog');
-const okButton = document.querySelector('#ok-btn');
-const cancelButton = document.querySelector('#cancel-btn');
-
-okButton.addEventListener('click', () => {
-  dialog.style.display = 'none';
-  // seu código para jogar novamente aqui
-});
-
-cancelButton.addEventListener('click', () => {
-  dialog.style.display = 'none';
-  // seu código para lidar com o cancelamento aqui
-});
-
-dialog.style.display = 'flex';
