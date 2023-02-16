@@ -11,6 +11,14 @@
     <div class="wrapper" id="tela-inicial">
         <h1>PALAVRAS</h1>
         <button id="start-button">COMEÇAR</button>
+        <div id="regras">
+            <span class="regra">Tente descobrir a palavra com 5 letras</span>
+            <span class="regra">Aperte enter assim que escrever para fazer uma tentativa</span>
+            <span class="regra">Voce só tem 5 tentativas por palavra</span>
+            <span class="regra">Você pode ganhar até 500 pontos por palavra</span>
+            <span class="regra">Cada tentativa perde 100 pontos</span>
+        </div>
+
     </div>
 
     <div id="ajudas" style="display: none;  ">
@@ -37,7 +45,12 @@
         </div>
         <table id="respostas"></table>
     </div>
-
+    <div class="dialog">
+        <h2 class="title">Parabéns, você acertou a palavra ${resposta}!</h2>
+        <p> Deseja jogar novamente? </p>
+        <button id="ok-btn">OK</button>
+        <button id="cancel-btn">Cancelar</button>
+    </div>
       
     <!-- <canvas id="canvas"></canvas> -->
     <script src="jogo.js"></script>
