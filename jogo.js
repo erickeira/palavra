@@ -16,7 +16,7 @@ const labelProximaPalavra = document.querySelector('#label-prox-palavra');
 async function exibirProximo() {
   let palavraProxima = await buscarPalavraProxima(resposta);
   console.log(palavraProxima)
-  labelProximaPalavra.textContent = palavraProxima;
+  labelProximaPalavra.innerHTML = palavraProxima;
 }
 
 const proximoBtn = document.getElementById('proximo-btn');
@@ -191,7 +191,7 @@ async function buscarPalavraProxima(palavra) {
   const endpoint = `https://api.dicionario-aberto.net/near/${palavra}`;
   const response = await fetch(endpoint);
   const data = await response.json();
-  const proxima = data[0];
+  const proxima = data[0].preview;
   return proxima;
 }
 
